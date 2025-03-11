@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block body_content %}
+<div class="container mt-5">
+    <div class="card shadow p-4">
+        <h2 class="text-center">Secure Payment</h2>
+        <hr>
+
+        <p class="lead text-center">
+            Amount to Pay: <strong>${{ request.session.cart_total_display }}</strong>
+        </p>
+
+        <div class="text-center">
+            <form action="{% url 'process_payment' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg">
+                    Pay Now <i class="fas fa-lock"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

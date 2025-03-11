@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_content %}
+<!-- ========================= SECTION MAIN ========================= -->
+<section class="section-intro padding-y-sm">
+    <div class="container">
+        <div class="intro-banner-wrap">
+            <img src="{% static 'images/banners/cover.jpg' %}" class="img-fluid rounded">
+        </div>
+    </div> <!-- container //  -->
+</section>
+<!-- ========================= SECTION MAIN END// ========================= -->
+
+<!-- ========================= SECTION PRODUCTS ========================= -->
+<section class="section-name padding-y-sm">
+    <div class="container">
+        <header class="section-heading">
+            <a href="{% url 'store' %}" class="btn btn-outline-primary float-right">See all</a>
+            <h3 class="section-title">Popular Products</h3>
+        </header><!-- sect-heading -->
+
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3">
+                <div class="card card-product-grid">
+                    <a href="{{ product.get_url }}" class="img-wrap">
+                        <img src="{{ product.image.url }}" onerror="this.src='{% static 'images/default_product.jpg' %}';">
+                    </a>
+                    <figcaption class="info-wrap">
+                        <a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+                        <div class="price mt-1">$ {{ product.price }}</div> <!-- price-wrap.// -->
+                    </figcaption>
+                </div>
+            </div> <!-- col.// -->
+            {% empty %}
+            <p class="text-center">No products available.</p>
+            {% endfor %}
+        </div> <!-- row.// -->
+
+        <!-- Pagination Start -->
+        {% if products.has_other_pages %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                <!-- Show page numbers -->
+                {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ products.paginator.num_pages }}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        <!-- Pagination End -->
+
+    </div><!-- container // -->
+</section>
+<!-- ========================= SECTION  END// ========================= -->
+{% endblock %}
